@@ -24,27 +24,27 @@ VirtualBox provided the isolated lab infrastructure; Windows Server 2022 hosted 
 
 ## Steps
 
-<img src="01_Screenshots/1-wsman-connectivity.png" alt="WinRM connectivity">
+![WinRM connectivity](./01_Screenshots/1-wsman-connectivity.png)
 
 Configured and validated WinRM connectivity between the Windows 10 workstation and Windows Server to support remote administration of the Domain Controller.
 
-<img src="01_Screenshots/1-remote-PS-hostname.png" alt="Remote PowerShell hostname verification">
+![Remote PowerShell hostname verification](./01_Screenshots/1-remote-PS-hostname.png)
 
 Established a remote PowerShell session and configured the Windows Server hostname as `DC1`.
 
-<img src="01_Screenshots/2-static-ip-config.png" alt="Static IP configuration">
+![Static IP configuration](./01_Screenshots/2-static-ip-config.png)
 
 Assigned `DC1` the persistent Host-Only IP address `192.168.56.110` to provide reliable communication for domain services.
 
-<img src="01_Screenshots/1-AD-Forest.png" alt="Active Directory forest deployment">
+![Active Directory forest deployment](./01_Screenshots/1-AD-Forest.png)
 
 Installed Active Directory Domain Services and promoted `DC1` to the Domain Controller for the `DeleDFIR.local` forest.
 
-<img src="01_Screenshots/2-AD-Network-Config.png" alt="Active Directory network configuration">
+![Active Directory network configuration](./01_Screenshots/2-AD-Network-Config.png)
 
 Verified the Domain Controller network interfaces and confirmed DNS was configured to point to `DC1`.
 
-<img src="01_Screenshots/1-WS01-Domain-Join.png" alt="WS01 domain join">
+![WS01 domain join](./01_Screenshots/1-WS01-Domain-Join.png)
 
 Configured `WS01` to use the Domain Controller for DNS and successfully joined it to the `DeleDFIR.local` domain.
 
