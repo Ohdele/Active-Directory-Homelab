@@ -63,3 +63,62 @@ WS01 initially could not discover the domain because its DNS configuration was i
 ## Impact
 
 This provides a realistic Windows identity environment where SOC teams can monitor and investigate authentication, account, endpoint, DNS, and Active Directory security events.
+
+---
+
+
+# Part 2 — Automating Domain Users (Active Directory #02)
+
+## Objective
+Automate Active Directory user and group provisioning to reduce manual account-creation errors and provide a repeatable, controlled method for building domain-user environments.
+
+## Scope & Assumptions
+This lab simulates a Windows domain environment using `DC1` as the Domain Controller and `WS01` as the Windows 10 workstation, with PowerShell and JSON used for repeatable account provisioning and authentication testing.
+
+## Skills
+- Active Directory Administration
+- PowerShell Automation
+- Identity & Access Management
+- User and Group Provisioning
+- Domain Authentication
+- Troubleshooting & Incident Analysis
+- Security Validation
+- Windows Administration
+
+## Tools
+- **Windows Server 2022 / Active Directory** — Domain Controller and identity management.
+- **Windows 10 / WS01** — Domain workstation used for authentication testing.
+- **PowerShell** — Automated user/group creation, remote administration, and validation.
+- **VS Code** — Developed and maintained the PowerShell automation script and JSON configuration.
+- **JSON** — Structured configuration for repeatable user and group provisioning.
+- **WinRM** — Transferred automation files and enabled remote administration of `DC1`.
+- **Active Directory Users and Computers** — Verified provisioned users and groups.
+
+## Steps
+
+### 1. JSON-Based AD Configuration
+<img src="02_Screenshots/ad-users-grps-auto.png">
+
+Defined users, groups, and memberships in a JSON schema and used PowerShell automation to provision the configured Active Directory environment consistently.
+
+### 2. Automated User & Group Creation
+<img src="02_Screenshots/ad-user-creation-auto.png">
+
+Implemented `gen-ad.ps1` to create enabled domain users, generate secure random passwords, create groups, validate group existence, and assign users to their configured groups.
+
+### 3. Domain Authentication & Validation
+<img src="02_Screenshots/domain-user-auth-validation.png">
+
+Rejoined `WS01` to `DeleDFIR.local` and validated successful domain authentication and `Employees` group membership using `whoami` and `whoami /groups`.
+
+## Summary
+
+**Investigation Findings:** Evidence from PowerShell execution, Active Directory Users and Computers, and workstation authentication confirmed that the JSON-driven automation successfully created enabled domain users and assigned them to the `Employees` group.
+
+**Security Decision:** PowerShell automation with structured JSON configuration and secure random password generation was selected to reduce manual provisioning errors and avoid the intentionally weak credentials used in the reference vulnerable workflow; a known password was temporarily set for John Smith solely to validate domain authentication.
+
+**Validation:** The workflow was validated through successful JSON parsing and WinRM file transfer, creation of the `Employees` group and configured AD users, confirmation that Michael Adeyemi was enabled and assigned to `Employees`, and successful `john.smith` authentication on `WS01` verified with `whoami` and `whoami /groups`.
+
+## Impact
+
+Repeatable identity provisioning and validation reduces manual administrative effort, improves consistency, and gives SOC teams clearer evidence of domain-account configuration during investigations.
