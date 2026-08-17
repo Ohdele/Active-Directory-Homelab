@@ -122,3 +122,83 @@ Rejoined `WS01` to `DeleDFIR.local` and validated successful domain authenticati
 ## Impact
 
 Repeatable identity provisioning and validation reduces manual administrative effort, improves consistency, and gives SOC teams clearer evidence of domain-account configuration during investigations.
+
+---
+
+
+# PART 3 — PowerShell: Random Users & Weak Passwords
+
+## Objective
+Automate randomized Active Directory user and group provisioning to create a controlled security-testing environment for identifying authentication, password-policy, and account-management risks.
+
+## Scope & Assumptions
+This project is a local VirtualBox Active Directory lab using Windows Server 2022 (`DC1`), Windows 10 (`WS01`), and the `DeleDFIR.local` domain to simulate enterprise identity and security operations.
+
+## Skills
+- PowerShell automation
+- Active Directory administration
+- Identity and access management
+- Password-policy analysis
+- Authentication troubleshooting
+- Group Policy validation
+- Security testing and evidence collection
+- Incident investigation and troubleshooting
+
+## Tools
+- **Visual Studio Code** — Used to create and edit the PowerShell automation scripts, JSON schema, and randomized data files.
+- **PowerShell** — Automated randomized user/group generation, provisioning, validation, and troubleshooting.
+- **Active Directory Domain Services** — Hosted and managed the simulated enterprise identities, groups, and authentication.
+- **Windows Server 2022** — Provided the domain controller and security-policy environment.
+- **Windows 10** — Served as the domain workstation for authentication and Group Policy validation.
+- **WinRM / PowerShell Remoting** — Supported secure administration and deployment between the lab systems.
+- **VirtualBox** — Hosted the isolated Active Directory security-testing environment.
+
+## Steps
+
+### 01 — Random Active Directory Environment Generation
+<img src="03_Screenshots/RandomAD-JSON-Output.png">
+
+Created a PowerShell-based generator that produces randomized users, groups, names, and passwords, providing repeatable identity data for controlled security testing.
+
+### 02 — Random Data & Group Selection
+<img src="03_Screenshots/RandomGrpSelection.png">
+
+Implemented randomized and unique group selection so generated users receive varied organizational memberships for realistic access-control testing.
+
+### 03 — Random User Generation & JSON Structure
+<img src="03_Screenshots/Random-User-JSON-Generation.png">
+
+Configured the generator to create 20 randomized users with unique names, passwords, and group assignments and serialize the environment into a reusable JSON structure.
+
+### 04 — Random Domain Deployment & Troubleshooting
+<img src="03_Screenshots/RandomDomainDeployment.png">
+
+Deployed the generated environment to `DC1`, resolved group-handling and PowerShell Remoting issues, and verified the generated groups, users, and memberships in Active Directory.
+
+### 05 — Password Policy & Authentication Testing
+<img src="03_Screenshots/Password-Policy-Auth.png">
+
+Adjusted the domain password-policy testing workflow, validated authentication from `WS01`, and confirmed that the Default Domain Policy was being applied.
+
+### 06 — Random Domain Validation & Authentication
+<img src="03_Screenshots/Random-Domain-Validation-and-Auth.png">
+
+Validated the randomized domain environment across `DC1` and `WS01`, confirming domain membership, user authentication, account creation, and password-policy configuration.
+
+## Challenges & Troubleshooting
+Initial JSON output contained metadata instead of strings; corrected data‑loading logic to ensure clean schema. Encountered WinRM/SMB transfer failures and group‑creation errors, resolved by adjusting remoting workflow and fixing group‑handling logic.
+Password-policy authentication failed because generated passwords did not meet the domain requirements; I confirmed the account state with AD queries, then reset the test account to a compliant password and successfully authenticated from WS01.
+
+## Summary
+
+### Investigation Findings
+Evidence from Active Directory queries, `whoami`, `gpresult`, and `secpol.cfg` confirmed 20 generated users, successful domain authentication, application of the Default Domain Policy, and a configured minimum password length of 1 character.
+
+### Security Decision
+The environment used controlled weak-password testing and randomized identities to expose authentication and account-provisioning weaknesses without affecting a production environment.
+
+### Validation
+The implementation was validated by confirming generated accounts and group memberships in Active Directory, successful `WS01` domain authentication, Default Domain Policy application, and `MinimumPasswordLength = 1`, with temporary `out.json` credentials removed after testing.
+
+## SOC Impact
+The project provides a repeatable identity-testing environment that helps SOC teams reproduce authentication and account-management scenarios, investigate identity-related alerts, and validate security controls more efficiently.
