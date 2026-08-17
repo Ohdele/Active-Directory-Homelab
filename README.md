@@ -26,27 +26,27 @@ VirtualBox provided the isolated lab infrastructure; Windows Server 2022 hosted 
 
 ![WinRM connectivity](./01_Screenshots/1-wsman-connectivity.png)
 
-Configured and validated WinRM connectivity between the Windows 10 workstation and Windows Server to support remote administration of the Domain Controller.
+### 01. Configured and validated WinRM connectivity between the Windows 10 workstation and Windows Server to support remote administration of the Domain Controller.
 
 ![Remote PowerShell hostname verification](./01_Screenshots/1-remote-PS-hostname.png)
 
-Established a remote PowerShell session and configured the Windows Server hostname as `DC1`.
+### 02. Established a remote PowerShell session and configured the Windows Server hostname as `DC1`.
 
 ![Static IP configuration](./01_Screenshots/2-static-ip-config.png)
 
-Assigned `DC1` the persistent Host-Only IP address `192.168.56.110` to provide reliable communication for domain services.
+### 03. Assigned `DC1` the persistent Host-Only IP address `192.168.56.110` to provide reliable communication for domain services.
 
 ![Active Directory forest deployment](./01_Screenshots/1-AD-Forest.png)
 
-Installed Active Directory Domain Services and promoted `DC1` to the Domain Controller for the `DeleDFIR.local` forest.
+### 04. Installed Active Directory Domain Services and promoted `DC1` to the Domain Controller for the `DeleDFIR.local` forest.
 
 ![Active Directory network configuration](./01_Screenshots/2-AD-Network-Config.png)
 
-Verified the Domain Controller network interfaces and confirmed DNS was configured to point to `DC1`.
+### 05. Verified the Domain Controller network interfaces and confirmed DNS was configured to point to `DC1`.
 
 ![WS01 domain join](./01_Screenshots/1-WS01-Domain-Join.png)
 
-Configured `WS01` to use the Domain Controller for DNS and successfully joined it to the `DeleDFIR.local` domain.
+### 06. Configured `WS01` to use the Domain Controller for DNS and successfully joined it to the `DeleDFIR.local` domain.
 
 ## Challenges & Troubleshooting
 
@@ -98,17 +98,17 @@ This lab simulates a Windows domain environment using `DC1` as the Domain Contro
 
 [View PowerShell AD Automation Files](./PowerShell-AD-Automation/)
 
-### 1. JSON-Based AD Configuration
+### 01. JSON-Based AD Configuration
 <img src="02_Screenshots/ad-users-grps-auto.png">
 
 Defined users, groups, and memberships in a JSON schema and used PowerShell automation to provision the configured Active Directory environment consistently.
 
-### 2. Automated User & Group Creation
+### 02. Automated User & Group Creation
 <img src="02_Screenshots/ad-user-creation-auto.png">
 
 Implemented `gen-ad.ps1` to create enabled domain users, generate secure random passwords, create groups, validate group existence, and assign users to their configured groups.
 
-### 3. Domain Authentication & Validation
+### 03. Domain Authentication & Validation
 <img src="02_Screenshots/domain-user-auth-validation.png">
 
 Rejoined `WS01` to `DeleDFIR.local` and validated successful domain authentication and `Employees` group membership using `whoami` and `whoami /groups`.
@@ -160,12 +160,10 @@ This project is a local VirtualBox Active Directory lab using Windows Server 202
 [View PowerShell AD Automation Files](./PowerShell-AD-Automation/)
 
 ### 01 — Random Active Directory Environment Generation
-<img src="03_Screenshots/RandomAD-JSON-Output.png">
 
 Created a PowerShell-based generator that produces randomized users, groups, names, and passwords, providing repeatable identity data for controlled security testing.
 
 ### 02 — Random Data & Group Selection
-<img src="03_Screenshots/RandomGrpSelection.png">
 
 Implemented randomized and unique group selection so generated users receive varied organizational memberships for realistic access-control testing.
 
