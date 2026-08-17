@@ -60,14 +60,14 @@ WS01 initially could not discover the domain because its DNS configuration was i
 
 **Validation:** WinRM connectivity, hostname configuration, static IP configuration, AD DS deployment, DNS configuration, and the final domain-join status were validated through PowerShell and Windows configuration evidence.
 
-## Impact
+## SOC Impact
 
 This provides a realistic Windows identity environment where SOC teams can monitor and investigate authentication, account, endpoint, DNS, and Active Directory security events.
 
 ---
 
 
-# Part 2 — Automating Domain Users (Active Directory #02)
+# Part 2 — Automating Domain Users
 
 ## Objective
 Automate Active Directory user and group provisioning to reduce manual account-creation errors and provide a repeatable, controlled method for building domain-user environments.
@@ -95,6 +95,8 @@ This lab simulates a Windows domain environment using `DC1` as the Domain Contro
 - **Active Directory Users and Computers** — Verified provisioned users and groups.
 
 ## Steps
+
+[View PowerShell AD Automation Files](./PowerShell-AD-Automation/)
 
 ### 1. JSON-Based AD Configuration
 <img src="02_Screenshots/ad-users-grps-auto.png">
@@ -154,6 +156,8 @@ This project is a local VirtualBox Active Directory lab using Windows Server 202
 - **VirtualBox** — Hosted the isolated Active Directory security-testing environment.
 
 ## Steps
+
+[View PowerShell AD Automation Files](./PowerShell-AD-Automation/)
 
 ### 01 — Random Active Directory Environment Generation
 <img src="03_Screenshots/RandomAD-JSON-Output.png">
