@@ -250,7 +250,7 @@ Configured and validated the `DeleDFIR.local` Domain Controller and intentionall
 
 ### 02 — Password Policy & AD Automation
 
-./PowerShell-AD-Automation/gen-ad.ps1
+[View PowerShell AD Automation Files](./PowerShell-AD-Automation/)
 
 <img src="04_screenshots/undoExec.png">
 
