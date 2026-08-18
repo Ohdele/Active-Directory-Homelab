@@ -250,6 +250,8 @@ Configured and validated the `DeleDFIR.local` Domain Controller and intentionall
 
 ### 02 — Password Policy & AD Automation
 
+./PowerShell-AD-Automation/gen-ad.ps1
+
 <img src="04_screenshots/undoExec.png">
 
 Executed the AD automation `-Undo` workflow to remove generated Active Directory users and groups, demonstrating that the vulnerable environment could be safely reversed.
