@@ -204,3 +204,89 @@ The implementation was validated by confirming generated accounts and group memb
 
 ## SOC Impact
 The project provides a repeatable identity-testing environment that helps SOC teams reproduce authentication and account-management scenarios, investigate identity-related alerts, and validate security controls more efficiently.
+
+---
+
+
+# Part 4 — Building a Reversible Active Directory Lab
+
+## Objective
+
+Build a deliberately vulnerable and repeatable Active Directory lab to support controlled security testing while demonstrating the ability to create, validate, revert, and rebuild domain security configurations.
+
+## Scope & Assumptions
+
+A simulated `DeleDFIR.local` Active Directory environment consisting of Windows Server 2022 DC1, Windows 10 WS01, and a management workstation, with intentionally weak security settings used only for controlled lab exercises.
+
+## Skills
+
+- Active Directory administration and user/group management
+- Windows Server and workstation administration
+- PowerShell automation
+- Security policy configuration and validation
+- Domain join and remote administration
+- Authentication and domain-trust validation
+- Troubleshooting and evidence-based investigation
+- Reversible configuration and clean-slate environment management
+
+## Tools
+
+- **Visual Studio Code** — Edited and maintained the PowerShell automation scripts and JSON configuration files.
+- **Windows Server 2022** — Domain Controller and Active Directory/DNS services
+- **Windows 10 Pro** — Domain workstation and authentication testing
+- **PowerShell / Active Directory Module** — Administration, validation, and automation
+- **VirtualBox** — Isolated lab virtualization and recovery snapshots
+- **Git / GitHub** — Version control and evidence tracking
+- **secedit** — Security policy export and inspection
+- **VirtualBox Shared Folders / PowerShell Remoting** — Lab file transfer and remote administration
+
+## Steps
+
+### 01 — Domain Controller Preparation
+
+<img src="04_screenshots/AD_Domain_and_WeakPassword_Policy.png">
+
+Configured and validated the `DeleDFIR.local` Domain Controller and intentionally weak password policy to establish the controlled environment required for subsequent Active Directory security testing.
+
+### 02 — Password Policy & AD Automation
+
+<img src="04_screenshots/undoExec.png">
+
+Executed the AD automation `-Undo` workflow to remove generated Active Directory users and groups, demonstrating that the vulnerable environment could be safely reversed.
+
+<img src="04_screenshots/PasswordPolicyRestored.png">
+
+Verified that the undo workflow restored the domain password policy to the stronger baseline of a 7-character minimum with password complexity enabled.
+
+### 03 — Workstation Domain Join & Remote Administration
+
+<img src="04_screenshots/WS01-DC1-Remote-Admin-File-Transfer.png">
+
+Removed and rejoined WS01 to `DeleDFIR.local`, established PowerShell Remoting to DC1, and transferred the automation files for centralized Active Directory management.
+
+### 04 — Active Directory User Validation
+
+<img src="04_screenshots/Weak-Pass-Policy-Domain-User-Validation.png">
+
+Generated domain users with intentionally weak credentials and validated successful domain authentication, secure-channel health, and Domain Controller discovery from WS01.
+
+### 05 — Reversible Environment Management
+
+Validated the automation lifecycle by removing generated users and groups, restoring the stronger password policy, and confirming the environment could be recreated for repeatable security testing.
+
+## Challenges & Troubleshooting
+
+After the AD automation `-Undo` workflow removed generated accounts, WS01 remained domain-joined and the previously used domain account was unavailable, so access was recovered through the existing local Administrator account without rebuilding the workstation.  
+Host-to-WS01 SMB transfer also failed after the domain rejoin, so VirtualBox Shared Folders were used to transfer the automation data before PowerShell Remoting was used to copy it to DC1.
+
+## Summary
+
+**Investigation Findings:** Evidence confirmed an intentionally weak password policy (`MinimumPasswordLength = 1`, `PasswordComplexity = 0`), successful domain-user authentication, healthy WS01 secure-channel status, and successful discovery of DC1.
+
+**Security Decision:** A reversible PowerShell automation workflow was used to make the vulnerable AD state repeatable while allowing generated security objects and policy changes to be safely removed and restored.
+
+**Validation:** The environment successfully created three configured domain users, assigned them to the `Employees` security group, authenticated a generated user from WS01, validated the domain connection, and restored the baseline password policy through the automation workflow.
+
+## SOC Impact
+
+A repeatable vulnerable AD environment allows SOC teams to safely reproduce authentication and identity-related attack conditions, validate detection and response workflows, and reset the environment quickly for repeated investigations.
