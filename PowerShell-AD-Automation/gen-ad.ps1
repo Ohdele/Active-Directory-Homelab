@@ -1,6 +1,8 @@
 param(
     [Parameter(Mandatory = $true)]
-    [string]$JsonFile
+    [string]$JsonFile,
+
+    [switch]$Undo
 )
 
 Set-ExecutionPolicy -Scope Process -ExecutionPolicy RemoteSigned
@@ -71,6 +73,32 @@ function Create-ADUser {
             Write-Warning "Group '$Group' does not exist; $SamAccountName was not added."
         }
     }
+}
+
+if ($Undo) {
+    Set-ADDefaultDomainPasswordPolicy -Identity $Domain -MinPasswordLength 7 -ComplexityEnabled $true
+
+    foreach ($User in $config.users) {
+        $FirstName, $LastName = $User.name -split ' ', 2
+        $SamAccountName = ("{0}.{1}" -f $FirstName, $LastName).ToLower()
+
+        if (Get-ADUser -Identity $SamAccountName -ErrorAction SilentlyContinue) {
+            Remove-ADUser -Identity $SamAccountName -Confirm:$false
+            Write-Host "[-] Removed user: $SamAccountName"
+        }
+    }
+
+    foreach ($Group in $config.groups) {
+        $GroupName = if ($Group -is [string]) { $Group } else { $Group.name }
+
+        if (Get-ADGroup -Identity $GroupName -ErrorAction SilentlyContinue) {
+            Remove-ADGroup -Identity $GroupName -Confirm:$false
+            Write-Host "[-] Removed group: $GroupName"
+        }
+    }
+
+    Write-Host "[+] Active Directory environment reverted."
+    return
 }
 
 foreach ($Group in $config.groups) {
