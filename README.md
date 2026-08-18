@@ -292,3 +292,75 @@ Host-to-WS01 SMB transfer also failed after the domain rejoin, so VirtualBox Sha
 ## SOC Impact
 
 A repeatable vulnerable AD environment allows SOC teams to safely reproduce authentication and identity-related attack conditions, validate detection and response workflows, and reset the environment quickly for repeated investigations.
+
+---
+
+
+# Part 5 — Brute-Forcing Domain Passwords
+
+### Objective
+Assess the resilience of a controlled Active Directory environment against credential attacks and identify password-policy weaknesses that could increase account-compromise risk.
+
+### Scope & Assumptions
+Testing was performed in the isolated `DeleDFIR.local` VirtualBox lab using Kali Linux, DC1, and WS01, with all credential-testing activities limited to the intentionally vulnerable environment.
+
+### Skills
+- Active Directory security assessment
+- Credential testing and password-policy analysis
+- SMB and LDAP enumeration
+- Network/service enumeration
+- Evidence collection and troubleshooting
+- Security validation and risk assessment
+
+### Tools
+- **Kali Linux:** Attack workstation for controlled credential-testing and reconnaissance.
+- **Windows Server 2022 (DC1):** Domain Controller hosting the `DeleDFIR.local` Active Directory environment and target for credential validation and enumeration.
+- **Windows 10 (WS01):** Domain-joined workstation used for host and network validation.
+- **NetExec:** SMB/LDAP authentication, credential validation, and Active Directory enumeration.
+- **Nmap:** Network and service discovery against lab systems.
+- **VirtualBox:** Isolated lab infrastructure and Host-Only networking.
+
+### Steps
+
+<img src="05_Screenshots/PasswordWordlistPrepared.png">
+
+Prepared domain usernames and a password wordlist in Kali for controlled credential testing against the Active Directory environment.
+
+<img src="05_Screenshots/KalitoDC1NetworkValidation.png">
+
+Validated Host-Only connectivity between Kali and DC1 before conducting credential-testing activities.
+
+<img src="05_Screenshots/DC1-AD-SerEnum.png">
+
+Enumerated DC1 services with Nmap to identify exposed Active Directory services relevant to the security assessment.
+
+<img src="05_Screenshots/DC1SMBAuthValidation.png">
+
+Validated SMB connectivity and authenticated to DC1 with a domain account, confirming the credential-testing workflow was functioning.
+
+<img src="05_Screenshots/SMB_Cred_Validation_and_Password_Policy.png">
+
+Used the recovered low-privileged credential to validate SMB access and confirm the intentionally weak domain password policy.
+
+<img src="05_Screenshots/CredDomainUserEnum.png">
+
+Used the valid low-privileged credential to enumerate 28 domain user accounts through SMB.
+
+<img src="05_Screenshots/Credentialed-Group&Computer-Enum.png">
+
+Used LDAP enumeration to identify custom Active Directory groups and the two domain computers, `DC1$` and `WS01$`.
+
+### Challenges & Troubleshooting
+Initial credential testing produced `STATUS_LOGON_FAILURE` because `out.json` contained stale credentials from an earlier AD state; reviewing `net user /domain` and PowerShell history identified that `andrew.anderson` had been manually reset.  
+The corrected credential successfully authenticated through NetExec, allowing password-policy enumeration and subsequent credentialed Active Directory reconnaissance.
+
+### Summary
+
+**Investigation Findings:** Evidence from NetExec, Nmap, and Active Directory enumeration confirmed successful low-privileged SMB/LDAP access, 28 enumerated users, two domain computers, accessible `NETLOGON`/`SYSVOL` shares, and a password policy allowing one-character passwords with complexity disabled.
+
+**Security Decision:** SMB and LDAP were selected for credential validation and directory reconnaissance because they provided the required authentication and Active Directory visibility while remaining appropriate for the isolated lab environment.
+
+**Validation:** NetExec confirmed successful authentication and retrieved the configured policy values of `Minimum password length: 1` and `Domain Password Complex: 0`, demonstrating that the lab environment remained intentionally vulnerable to weak-credential risk.
+
+### SOC Impact
+The exercise demonstrates how defenders can validate credential exposure and weak Active Directory controls, producing evidence that can support detection engineering, account-risk assessment, and remediation decisions.
