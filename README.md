@@ -364,3 +364,38 @@ The corrected credential successfully authenticated through NetExec, allowing pa
 
 ### SOC Impact
 The exercise demonstrates how defenders can validate credential exposure and weak Active Directory controls, producing evidence that can support detection engineering, account-risk assessment, and remediation decisions.
+
+---
+
+
+## Part 6 — BloodHound Domain Enumeration
+
+- **Objective:** Map Active Directory identities, privileges, and relationships to identify potential privilege paths and improve understanding of domain security risks.
+
+- **Scope & Assumptions:** A controlled `DeleDFIR.local` Active Directory lab was enumerated remotely from a Kali Linux attacker workstation using a verified low-privileged domain account.
+
+- **Skills:** Active Directory enumeration, identity and privilege analysis, attack-path analysis, security reconnaissance, troubleshooting, evidence-based investigation.
+
+- **Tools:** Kali Linux, BloodHound Community Edition (CE), `bloodhound-python`, Neo4j, PostgreSQL, Active Directory, PowerShell, and Cypher queries.
+
+- **Steps:**
+<img src="06_Screenshots/BloodHound_Neo4j_Server_Started.png">
+  Configured the BloodHound environment and Neo4j backend, then used `bloodhound-python` with the verified domain credential to remotely collect Active Directory users, groups, computers, domains, GPOs, OUs, and containers for relationship analysis.
+
+<img src="06_Screenshots/bloodhound-ad-relationship-graph.png">
+  Imported the collected data into BloodHound CE and analyzed domain relationships, group memberships, privileged accounts, and potential attack paths within the lab environment.
+
+- **Challenges & Troubleshooting:** 
+BloodHound initially encountered Kerberos, DNS, and Global Catalog resolution issues when attempting to reach `DC1`, evidenced by collector connection errors and hostname-resolution failures. Configured Kali to resolve the domain through the Domain Controller and validated hostname resolution, after which BloodHound successfully collected and exported the Active Directory data.
+
+- **Summary:**
+  - **Investigation Findings:** BloodHound successfully collected evidence covering 2 computers, 29 users, 62 groups, 2 GPOs, 1 OU, and 19 containers, enabling analysis of Active Directory relationships and privilege paths.
+
+<img src="06_Screenshots/BloodHound_AD_Collection_Success.png">
+
+  - **Security Decision:** BloodHound was selected because relationship-based AD analysis provides visibility into how low-privileged accounts, groups, computers, and privileged resources are connected.
+
+  - **Validation:** Successful JSON collection, import into BloodHound CE, and visualization of `DeleDFIR.local` relationships confirmed that the enumeration workflow was functioning correctly.
+
+- **SOC Impact**
+ BloodHound gives SOC and security teams a relationship-based view of Active Directory that can accelerate investigation of privilege exposure, account relationships, and potential attack paths.
