@@ -4,6 +4,9 @@
 
 Set up an Active Directory environment in a home local lab as a framework for simulating red-team attacks and blue-team defenses and showcasing realistic security scenarios.
 
+---
+
+
 # PART 1 — Creating Server + Workstation Virtual Environment + Active Directory Join
 
 ## Objective
@@ -16,37 +19,37 @@ This is Part 1 of a local VirtualBox lab containing a Windows Server 2022 Domain
 
 ## Skills
 
-Active Directory Administration, Windows Server Administration, DNS Configuration, Network Configuration, PowerShell, WinRM, Domain Management, Virtual Machine Administration, Troubleshooting.
+Active Directory Administration | Windows Server Administration | DNS Configuration | Network Configuration | PowerShell | WinRM | Domain Management | Virtual Machine Administration | Troubleshooting
 
 ## Tools
 
-VirtualBox provided the isolated lab infrastructure; Windows Server 2022 hosted Active Directory Domain Services and DNS; Windows 10 served as the domain workstation; PowerShell and WinRM supported remote administration and configuration.
+VirtualBox provided the isolated lab infrastructure | Windows Server 2022 hosted Active Directory Domain Services and DNS | Windows 10 served as the domain workstation | PowerShell and WinRM supported remote administration and configuration
 
 ## Steps
 
 ![WinRM connectivity](./01_Screenshots/1-wsman-connectivity.png)
 
-### 01. Configured and validated WinRM connectivity between the Windows 10 workstation and Windows Server to support remote administration of the Domain Controller.
+## A. Configured and validated WinRM connectivity between the Windows 10 workstation and Windows Server to support remote administration of the Domain Controller.
 
 ![Remote PowerShell hostname verification](./01_Screenshots/1-remote-PS-hostname.png)
 
-### 02. Established a remote PowerShell session and configured the Windows Server hostname as `DC1`.
+## B. Established a remote PowerShell session and configured the Windows Server hostname as `DC1`.
 
 ![Static IP configuration](./01_Screenshots/2-static-ip-config.png)
 
-### 03. Assigned `DC1` the persistent Host-Only IP address `192.168.56.110` to provide reliable communication for domain services.
+## C. Assigned `DC1` the persistent Host-Only IP address `192.168.56.110` to provide reliable communication for domain services.
 
 ![Active Directory forest deployment](./01_Screenshots/1-AD-Forest.png)
 
-### 04. Installed Active Directory Domain Services and promoted `DC1` to the Domain Controller for the `DeleDFIR.local` forest.
+## D. Installed Active Directory Domain Services and promoted `DC1` to the Domain Controller for the `DeleDFIR.local` forest.
 
 ![Active Directory network configuration](./01_Screenshots/2-AD-Network-Config.png)
 
-### 05. Verified the Domain Controller network interfaces and confirmed DNS was configured to point to `DC1`.
+## E. Verified the Domain Controller network interfaces and confirmed DNS was configured to point to `DC1`.
 
 ![WS01 domain join](./01_Screenshots/1-WS01-Domain-Join.png)
 
-### 06. Configured `WS01` to use the Domain Controller for DNS and successfully joined it to the `DeleDFIR.local` domain.
+## F. Configured `WS01` to use the Domain Controller for DNS and successfully joined it to the `DeleDFIR.local` domain.
 
 ## Challenges & Troubleshooting
 
@@ -76,14 +79,7 @@ Automate Active Directory user and group provisioning to reduce manual account-c
 This lab simulates a Windows domain environment using `DC1` as the Domain Controller and `WS01` as the Windows 10 workstation, with PowerShell and JSON used for repeatable account provisioning and authentication testing.
 
 ## Skills
-- Active Directory Administration
-- PowerShell Automation
-- Identity & Access Management
-- User and Group Provisioning
-- Domain Authentication
-- Troubleshooting & Incident Analysis
-- Security Validation
-- Windows Administration
+- Active Directory Administration | PowerShell Automation | Identity & Access Management | User and Group Provisioning | Domain Authentication | Troubleshooting & Incident Analysis | Security Validation | Windows Administration
 
 ## Tools
 - **Windows Server 2022 / Active Directory** — Domain Controller and identity management.
@@ -137,14 +133,7 @@ Automate randomized Active Directory user and group provisioning to create a con
 This project is a local VirtualBox Active Directory lab using Windows Server 2022 (`DC1`), Windows 10 (`WS01`), and the `DeleDFIR.local` domain to simulate enterprise identity and security operations.
 
 ## Skills
-- PowerShell automation
-- Active Directory administration
-- Identity and access management
-- Password-policy analysis
-- Authentication troubleshooting
-- Group Policy validation
-- Security testing and evidence collection
-- Incident investigation and troubleshooting
+- PowerShell automation | Active Directory administration | Identity and access management | Password-policy analysis | Authentication troubleshooting | Group Policy validation | Security testing and evidence collection | Incident investigation and troubleshooting
 
 ## Tools
 - **Visual Studio Code** — Used to create and edit the PowerShell automation scripts, JSON schema, and randomized data files.
@@ -153,7 +142,6 @@ This project is a local VirtualBox Active Directory lab using Windows Server 202
 - **Windows Server 2022** — Provided the domain controller and security-policy environment.
 - **Windows 10** — Served as the domain workstation for authentication and Group Policy validation.
 - **WinRM / PowerShell Remoting** — Supported secure administration and deployment between the lab systems.
-- **VirtualBox** — Hosted the isolated Active Directory security-testing environment.
 
 ## Steps
 
@@ -220,14 +208,7 @@ A simulated `DeleDFIR.local` Active Directory environment consisting of Windows 
 
 ## Skills
 
-- Active Directory administration and user/group management
-- Windows Server and workstation administration
-- PowerShell automation
-- Security policy configuration and validation
-- Domain join and remote administration
-- Authentication and domain-trust validation
-- Troubleshooting and evidence-based investigation
-- Reversible configuration and clean-slate environment management
+- Active Directory administration and user/group management | Windows Server and workstation administration | PowerShell automation | Security policy configuration and validation | Domain join and remote administration | Authentication and domain-trust validation - Troubleshooting and evidence-based investigation - Reversible configuration and clean-slate environment management
 
 ## Tools
 
@@ -305,12 +286,7 @@ Assess the resilience of a controlled Active Directory environment against crede
 Testing was performed in the isolated `DeleDFIR.local` VirtualBox lab using Kali Linux, DC1, and WS01, with all credential-testing activities limited to the intentionally vulnerable environment.
 
 ### Skills
-- Active Directory security assessment
-- Credential testing and password-policy analysis
-- SMB and LDAP enumeration
-- Network/service enumeration
-- Evidence collection and troubleshooting
-- Security validation and risk assessment
+- Active Directory security assessment | Credential testing and password-policy analysis | SMB and LDAP enumeration | Network/service enumeration | Evidence collection and troubleshooting | Security validation and risk assessment
 
 ### Tools
 - **Kali Linux:** Attack workstation for controlled credential-testing and reconnaissance.
@@ -374,9 +350,9 @@ The exercise demonstrates how defenders can validate credential exposure and wea
 
 - **Scope & Assumptions:** A controlled `DeleDFIR.local` Active Directory lab was enumerated remotely from a Kali Linux attacker workstation using a verified low-privileged domain account.
 
-- **Skills:** Active Directory enumeration, identity and privilege analysis, attack-path analysis, security reconnaissance, troubleshooting, evidence-based investigation.
+- **Skills:** Active Directory enumeration | identity and privilege analysis | attack-path analysis | security reconnaissance | troubleshooting | evidence-based investigation
 
-- **Tools:** Kali Linux, BloodHound Community Edition (CE), `bloodhound-python`, Neo4j, PostgreSQL, Active Directory, PowerShell, and Cypher queries.
+- **Tools:** Kali Linux | BloodHound Community Edition (CE) | `bloodhound-python` | Neo4j | PostgreSQL | Active Directory | PowerShell | Cypher queries
 
 - **Steps:**
 <img src="06_Screenshots/BloodHound_Neo4j_Server_Started.png">
@@ -399,3 +375,57 @@ BloodHound initially encountered Kerberos, DNS, and Global Catalog resolution is
 
 - **SOC Impact**
  BloodHound gives SOC and security teams a relationship-based view of Active Directory that can accelerate investigation of privilege exposure, account relationships, and potential attack paths.
+
+ ---
+
+
+ # PART 7 — PowerShell: Automating Random Local Administrators
+
+## Objective
+Automate the generation and assignment of controlled local administrator accounts in an Active Directory environment to support repeatable privilege-management and security testing.
+
+## Scope & Assumptions
+This project was implemented as a controlled Active Directory lab using Windows Server 2022, PowerShell, and generated test accounts, with administrator assignments limited to the Domain Controller.
+
+## Skills
+- PowerShell automation | Active Directory administration | Privileged account management | Identity and access management | Security testing | Troubleshooting and validation | Evidence-based investigation
+
+## Tools
+- **PowerShell** — automated user, group, and local administrator generation.
+- **Active Directory** — provided the identity and privilege-management environment.
+- **Windows Server 2022** — hosted the Domain Controller and local Administrators group.
+- **PowerShell Remoting** — enabled remote administration and file transfer between lab systems.
+- **VirtualBox** — provided the isolated lab environment.
+
+## Steps
+
+[View PowerShell AD Automation – Part 7](./PowerShell-AD-Auto-07/)
+
+
+<img src="07_Screenshots/random-local-admin-generation.png">
+
+The PowerShell generator was modified to create a configurable test environment and randomly designate exactly three unique generated users as local administrators.
+
+<img src="07_Screenshots/ad-local-admin-assignment.png">
+
+The AD generation script reads each user's `LocalAdmin` property and assigns designated domain accounts to the local `Administrators` group.
+
+<img src="07_Screenshots/env-rebuild-local-admins.png">
+
+The rebuilt environment was validated with eight users and three designated local administrators, with `net localgroup administrators` confirming `paul.davis`, `robert.anderson`, and `david.williams`.
+
+## Challenges & Troubleshooting
+The initial generated JSON contained 20 users and no `LocalAdmin` properties because DC1 was using an older 1,597-byte copy of the generator, which was identified by inspecting the script contents and file metadata.  
+The updated 2,123-byte script was copied through the VirtualBox shared-folder workflow to DC1, after which the JSON correctly contained eight users and three `LocalAdmin: true` entries and the AD generator successfully assigned all three accounts.
+
+## Summary
+
+**Investigation Findings:** Evidence from the generated JSON and `net localgroup administrators` confirmed that exactly eight test users were generated and three designated accounts received local administrator privileges.
+
+**Security Decision:** A configurable and randomized administrator-assignment approach was selected to make privileged-account scenarios repeatable while avoiding hard-coded administrator identities.
+
+**Validation:** The control was validated by confirming three `LocalAdmin: true` entries in the JSON and three corresponding generated users in DC1's local `Administrators` group, with continued monitoring recommended through Windows security-event and privileged-account activity.
+
+## SOC Impact
+
+Automating repeatable privileged-account scenarios gives SOC teams a consistent way to generate, test, and validate identity-based detections while reducing manual configuration effort.

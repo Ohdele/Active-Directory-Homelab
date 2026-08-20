@@ -1,0 +1,28 @@
+{
+  "domain": "DeleDFIR.local",
+  "users": [
+    {
+      "name": "John Smith",
+      "groups": [
+        "Employees"
+      ]
+    },
+    {
+      "name": "David Okafor",
+      "groups": [
+        "Employees"
+      ]
+    },
+    {
+      "name": "Michael Adeyemi",
+      "groups": [
+        "Employees"
+      ]
+    }
+  ],
+  "groups": [
+    {
+      "name": "Employees"
+    }
+  ]
+}

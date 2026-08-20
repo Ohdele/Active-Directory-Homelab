@@ -1,0 +1,72 @@
+{
+    "Domain":  "DeleDFIR.local",
+    "Users":  [
+                  {
+                      "Groups":  [
+                                     "Students"
+                                 ],
+                      "Name":  "Paul Thomas",
+                      "Password":  "dragon",
+                      "LocalAdmin":  true
+                  },
+                  {
+                      "Groups":  [
+                                     "Students"
+                                 ],
+                      "Name":  "Christopher Taylor",
+                      "Password":  "password",
+                      "LocalAdmin":  true
+                  },
+                  {
+                      "Groups":  [
+                                     "Students"
+                                 ],
+                      "Name":  "Anthony Martin",
+                      "Password":  "qwerty",
+                      "LocalAdmin":  true
+                  },
+                  {
+                      "Groups":  [
+                                     "Students"
+                                 ],
+                      "Name":  "James Jones",
+                      "Password":  "admin1",
+                      "LocalAdmin":  true
+                  },
+                  {
+                      "Groups":  [
+                                     "Students"
+                                 ],
+                      "Name":  "Michael Johnson",
+                      "Password":  "Password1",
+                      "LocalAdmin":  true
+                  },
+                  {
+                      "Groups":  [
+                                     "Students"
+                                 ],
+                      "Name":  "William Walker",
+                      "Password":  "Password1",
+                      "LocalAdmin":  true
+                  },
+                  {
+                      "Groups":  [
+                                     "Students"
+                                 ],
+                      "Name":  "George Clark",
+                      "Password":  "summer",
+                      "LocalAdmin":  true
+                  },
+                  {
+                      "Groups":  [
+                                     "Students"
+                                 ],
+                      "Name":  "Brian Davis",
+                      "Password":  "letmein",
+                      "LocalAdmin":  true
+                  }
+              ],
+    "Groups":  [
+                   "Students"
+               ]
+}
