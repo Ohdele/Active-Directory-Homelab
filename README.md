@@ -2,7 +2,48 @@
 
 ## Overview
 
-Set up an Active Directory environment in a home local lab as a framework for simulating red-team attacks and blue-team defenses and showcasing realistic security scenarios.
+Built a Windows Active Directory homelab to simulate realistic security operations, including identity and access management (IAM), Joiner‑Mover‑Leaver (JML) lifecycle automation, access reviews, red‑team attack scenarios, and blue‑team defensive investigations. The environment provides a repeatable framework for testing, validating, and demonstrating SOC‑level identity and access controls.
+
+---
+
+
+# PART 00 — Active Directory Homelab Architecture & JML/IAM Workflow
+
+## Objective
+
+Provide a clear architectural view of the Active Directory homelab and its IAM/JML automation to demonstrate how identity, access, security testing, and validation components work together.
+
+## Scope & Assumptions
+
+This diagram represents the simulated DeleDFIR.local Active Directory environment built in VirtualBox, including the management host, DC1, WS01, Kali Linux, and the JML/IAM workflow.
+
+## Skills
+
+- Active Directory Architecture
+- Identity & Access Management (IAM)
+- Joiner-Mover-Leaver (JML) Lifecycle Management
+- Access Review & Validation
+- Network & Systems Architecture
+- Security Architecture & Documentation
+
+## Tools
+
+- **draw.io** — Used to design the architecture diagram and visually map the Active Directory infrastructure, management/automation layer, security-testing environment, and JML/IAM workflow.
+
+## Steps
+
+<img src="00_AD_IAM_Diagram/AD-JML-IAM-Workflow.png">
+
+Created an architecture diagram showing the management, Active Directory infrastructure, and security-testing zones while highlighting the Part 8 flow from simulated HR data through JML/IAM automation to Active Directory access and audit evidence.
+
+## Summary
+
+**Security Decision:** A three-zone architecture was selected to clearly separate management and automation, identity infrastructure, and security testing while keeping the JML/IAM workflow visually prominent.
+
+
+## Operational Impact
+
+A clear architecture gives SOC and security teams a single visual reference for understanding identity flows, access changes, investigation points, and security-testing paths across the lab.
 
 ---
 
@@ -429,3 +470,76 @@ The updated 2,123-byte script was copied through the VirtualBox shared-folder wo
 ## SOC Impact
 
 Automating repeatable privileged-account scenarios gives SOC teams a consistent way to generate, test, and validate identity-based detections while reducing manual configuration effort.
+
+---
+
+
+# PART 8 — Joiner, Mover, Leaver (JML) & Simulated Access Review
+
+## Objective
+
+Automate employee lifecycle access management to reduce the risk of inappropriate, excessive, or retained Active Directory access when employees join, change roles, or leave.
+
+## Scope & Assumptions
+
+This project is a simulated IAM workflow built on the DeleDFIR.local Active Directory homelab, using HR-style JSON records as the source of truth for Joiner, Mover, and Leaver events.
+
+## Skills
+
+- **Identity & Access Management (IAM)**
+- **Joiner-Mover-Leaver (JML)** lifecycle management
+- **Active Directory** administration
+- **Access provisioning** and deprovisioning
+- **Access review** and validation
+- **PowerShell automation**
+- **JSON identity data** handling
+- **Audit logging** and evidence collection
+- **Security operations** and access-control analysis
+
+## Tools
+
+- **Active Directory** — Provisioned, modified, disabled, and validated user identities and group-based access.
+- **PowerShell** — Automated JML provisioning, access revocation, validation, and audit logging.
+- **JSON** — Used as the simulated HR/source identity record.
+- **Windows Server / WinRM** — Executed and validated the workflow on the domain controller.
+- **GitHub** — Preserved the automation and portfolio evidence.
+
+## Steps
+
+[View PowerShell JML/IAM Automation – Part 8](./PowerShell-JML-IAM-Automation/)
+
+
+### A. Joiner — HR Record to AD Access
+
+<img src="08_Screenshots/Joiner_HR_to_AD_Access_Validation.png">
+
+Created a simulated HR employee record for Sarah Johnson, provisioned the corresponding AD account with employee attributes, and validated baseline `Employees` group access.
+
+### B. Leaver — Automated Access Revocation
+
+<img src="08_Screenshots/Leaver_AD_Access_Revocation_Audit.png">
+
+Changed Sarah Johnson’s HR status to `Terminated`, detected the termination during synchronization, disabled her AD account, removed `Employees` access, and recorded the remediation in an audit log.
+
+### C. Mover — Role Change & Access Review
+
+<img src="08_Screenshots/Mover_Access_Review_Final_State.png">
+
+Changed David Okafor’s department and role, exported his existing access for review, documented the retention decision, and validated his final AD memberships.
+
+## Challenges & Troubleshooting
+
+The existing AD automation did not initially support HR lifecycle attributes, termination handling, or access-review decisions, so the PowerShell workflow was extended without removing the existing provisioning capability.  
+The workflow was validated against the HR JSON source and Active Directory outputs, confirming that the Leaver path disabled the terminated account and removed `Employees` access while the Mover review preserved approved baseline access.
+
+## Summary
+
+**Investigation Findings:** Evidence from the HR source records, Active Directory membership checks, and JML audit log confirmed that lifecycle changes could be mapped to specific identity provisioning, deprovisioning, and access-review outcomes.
+
+**Security Decision:** A JSON-driven PowerShell workflow was selected to provide repeatable lifecycle enforcement while keeping identity changes, access decisions, and remediation actions auditable.
+
+**Validation:** Three lifecycle scenarios were validated—one Joiner provisioned with baseline access, one Leaver disabled with access revoked and audited, and one Mover reviewed with approved access retained.
+
+## Operational Impact
+
+Automating JML and access-review actions reduces manual identity-management effort, improves consistency of access decisions, and gives SOC/IAM teams auditable evidence for investigating inappropriate or outdated access.
