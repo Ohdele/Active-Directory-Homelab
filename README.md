@@ -32,7 +32,7 @@ This diagram represents the simulated DeleDFIR.local Active Directory environmen
 
 ## Steps
 
-<img src="00_AD_IAM_Diagram/AD-JML-IAM-Workflow.png">
+<img src="00_AD_IAM_Diagram/AD%20-JML-IAM-Workflow.png">
 
 Created an architecture diagram showing the management, Active Directory infrastructure, and security-testing zones while highlighting the Part 8 flow from simulated HR data through JML/IAM automation to Active Directory access and audit evidence.
 
