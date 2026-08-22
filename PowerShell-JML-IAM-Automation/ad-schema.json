@@ -1,0 +1,47 @@
+{
+  "domain": "DeleDFIR.local",
+  "users": [
+    {
+      "name": "John Smith",
+      "description": "Test credential exposure",
+      "showPassword": true,
+      "groups": [
+        "Employees"
+      ]
+    },
+    {
+      "employeeId": "EMP002",
+      "name": "David Okafor",
+      "department": "Finance",
+      "role": "Financial Analyst",
+      "description": "Simulated HR Mover record",
+      "groups": [
+        "Employees"
+      ]
+    },
+    {
+      "name": "Michael Adeyemi",
+      "description": "Test credential exposure",
+      "groups": [
+        "Employees"
+      ]
+    },
+    {
+      "employeeId": "EMP004",
+      "name": "Sarah Johnson",
+      "department": "IT",
+      "role": "SOC Analyst",
+      "startDate": "2026-08-24",
+      "status": "Terminated",
+      "description": "Simulated HR Joiner record",
+      "groups": [
+        "Employees"
+      ]
+    }
+  ],
+  "groups": [
+    {
+      "name": "Employees"
+    }
+  ]
+}
