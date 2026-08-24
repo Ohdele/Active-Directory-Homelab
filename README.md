@@ -602,3 +602,56 @@ WMIExec authenticated but failed to establish a shell and triggered Microsoft De
 ## Operational Impact
 
 Helps SOC analysts quickly identify and validate exploitable administrative access and lateral‑movement paths before attackers can abuse them, improving triage speed and reducing overall security risk.
+
+---
+
+
+# Part 10 — Active Directory Credential Exposure & Remediation
+
+## Objective
+Identify and remediate the risk of exposed passwords stored in readable Active Directory user attributes.
+
+## Scope & Assumptions
+Demonstrated within a simulated AD lab environment (DeleDFIR.local) to validate credential exposure, investigation, and remediation workflows.
+
+## Skills
+- Active Directory security and user management | Credential exposure analysis | Identity and access management | SOC investigation and evidence collection | BloodHound enumeration and relationship analysis | Windows PowerShell administration | SMB authentication validation | Security remediation and verification | Technical documentation
+
+## Tools
+- **Active Directory / Windows Server** — Configured vulnerable user attributes and applied remediation.
+- **PowerShell** — Automated account provisioning, credential exposure setup, password reset, and remediation.
+- **Kali Linux** — Conducted credential discovery and validation.
+- **BloodHound** — Enumerated AD users, groups, computers, and relationships.
+- **BloodHound Python** — Collected domain data for investigation.
+- **SMBClient** — Verified exposed credentials against the domain controller.
+
+## Steps
+
+<img src="10_Screenshots/BloodHound_Michael_Obj.png">
+
+BloodHound inspection — Collected AD user object data and identified properties/relationships relevant to credential exposure.
+
+<img src="10_Screenshots/Exposed_Credential_SMB_Validation.png">
+
+Searched users.json for exposed descriptions and confirmed the discovered credential via SMB authentication.
+
+<img src="10_Screenshots/Credential_Exposure_Remediated.png">
+
+Reset the compromised account password and cleared the exposed AD description to remove the credential.
+
+## Challenges & Troubleshooting
+AD automation generated random passwords when accounts were recreated, invalidating known credentials; resolved by verifying account state and retrieving the current lab credential before rerunning BloodHound.
+
+BloodHound did not display the exposed description directly in the user panel, so users.json was searched to identify the exposed credential, which was then successfully validated through SMB authentication within the lab.
+
+## Summary
+
+**Investigation Findings:** BloodHound, users.json, and SMB authentication confirmed that Michael Adeyemi’s AD description field exposed a usable password that authenticated against DC1.
+
+**Security Decision:** The exposed credential was reset and the vulnerable description attribute removed.
+
+**Validation:** Get-ADUser verified the description field was cleared after remediation.
+
+## Operational Impact
+
+Reduces organizational breach risk by identifying and eliminating exposed Active Directory credentials before attackers can exploit them for unauthorized access, lateral movement, or data compromise.
