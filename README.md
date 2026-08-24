@@ -543,3 +543,62 @@ The workflow was validated against the HR JSON source and Active Directory outpu
 ## Operational Impact
 
 Automating JML and access-review actions reduces manual identity-management effort, improves consistency of access decisions, and gives SOC/IAM teams auditable evidence for investigating inappropriate or outdated access.
+
+---
+
+
+# PART 9 — Compromising Windows Hosts w/ Impacket
+
+## Objective
+Demonstrate how compromised administrative credentials could be used to remotely execute commands on Windows hosts and assess the resulting security exposure.
+
+## Scope & Assumptions
+This lab simulation used Kali Linux against the `DeleDFIR.local` Active Directory Host-Only network to assess remote administration and execution paths on DC1 and WS01.
+
+## Skills
+- Windows/Active Directory Security | Network & SMB Enumeration | Credential Validation | Remote Execution Analysis | Privilege Verification | Endpoint Security Analysis | Attack Path Analysis | Security Investigation & Documentation
+
+## Tools
+- **NetExec (NXC):** Enumerated Windows hosts, validated credentials, and identified writable administrative shares.
+- **Nmap:** Discovered reachable systems and mapped IP addresses.
+- **Impacket:** Tested PSExec, SMBExec, and WMIExec remote execution techniques.
+- **BloodHound:** Assessed Active Directory relationships and attack-path exposure.
+- **Microsoft Defender:** Provided endpoint detection during the WMIExec execution attempt.
+
+## Steps
+
+### 1. Windows Host & SMB Enumeration
+
+NetExec and Nmap identified WS01 (`192.168.56.102`) and confirmed SMB/445 exposure, while authenticated enumeration verified administrative access and writable `ADMIN$` and `C$` shares.
+
+### 2. PSExec Remote Execution
+<img src="09_Screenshots/PSExec_WS01_SYS_Remote_Exec.png">
+
+Impacket PSExec used the confirmed administrative credentials to access WS01 through `ADMIN$`, create a temporary service, and obtain an `NT AUTHORITY\SYSTEM` shell.
+
+### 3. SMBExec Remote Execution
+SMBExec successfully established a semi-interactive shell on WS01 and confirmed execution as `NT AUTHORITY\SYSTEM`, demonstrating a second viable SMB-based execution path.
+
+### 4. WMIExec & Endpoint Detection
+WMIExec was tested against WS01 and DC1 but did not establish a shell, while Microsoft Defender detected the remote-execution payload, demonstrating endpoint protection against the attempted technique.
+
+### 5. Privilege & Attack-Path Validation
+`whoami /priv` confirmed extensive SYSTEM privileges, while BloodHound marked the compromised Administrator account as Owned and showed zero outbound object-control relationships for WS01.
+
+<img src="09_Screenshots/BloodHound_WS01_Outbound_Obj_Ctrl.png">
+
+## Challenges & Troubleshooting
+WS01 initially returned `STATUS_NO_LOGON_SERVERS` because its DNS configuration used public DNS instead of the domain controller, which was identified through `ipconfig /all` and `nslookup` and resolved by configuring DNS to DC1 (`192.168.56.110`).  
+WMIExec authenticated but failed to establish a shell and triggered Microsoft Defender, so the failure and detection were documented rather than disabling the security control.
+
+## Summary
+
+**Investigation Findings:** Evidence from Nmap, NetExec, Impacket, `whoami /priv`, BloodHound, and Microsoft Defender showed that WS01 exposed SMB/445 with writable `ADMIN$`/`C$` shares, allowing confirmed administrative credentials to achieve SYSTEM-level execution through PSExec and SMBExec.
+
+**Security Decision:** SMB-based execution paths were prioritized because the exposed administrative shares and confirmed local-admin access represented the clearest demonstrated route to host compromise.
+
+**Validation:** PSExec and SMBExec both achieved `NT AUTHORITY\SYSTEM`, WMIExec failed and generated a Defender detection, and BloodHound reported zero outbound object-control relationships for WS01.
+
+## Operational Impact
+
+Helps SOC analysts quickly identify and validate exploitable administrative access and lateral‑movement paths before attackers can abuse them, improving triage speed and reducing overall security risk.
