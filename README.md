@@ -655,3 +655,50 @@ BloodHound did not display the exposed description directly in the user panel, s
 ## Operational Impact
 
 Reduces organizational breach risk by identifying and eliminating exposed Active Directory credentials before attackers can exploit them for unauthorized access, lateral movement, or data compromise.
+
+---
+
+
+## Part 11: NTLM vs Kerberos — Kerberoasting
+
+### Objective
+Show how a low‑privileged domain user can abuse an exposed Kerberos SPN to request a service ticket and enable offline password cracking, underscoring the risk of weak service‑account credentials.
+
+### Scope & Assumptions
+Controlled DeleDFIR.local Active Directory lab on Windows Server 2022 (DC1), WS01, and Kali Linux in a VirtualBox Host-Only network, with deliberately weak credentials used solely for security testing.
+
+### Skills
+Active Directory Security | Identity & Access Management | Kerberos Authentication | Kerberoasting | Credential Attack Analysis | PowerShell Automation | Security Validation | Incident Analysis
+
+### Tools
+1. **PowerShell** → Automated AD user creation, SPN assignment, and audit logging to simulate service accounts.
+2. **Active Directory** → Provided the domain environment where SPNs could be exposed and abused.
+3. **Kali Linux** → Served as the attacker machine to run Kerberoasting tools.
+4. **Impacket GetUserSPNs** → Queried AD for service accounts with SPNs and requested Kerberos tickets.
+5. **Hashcat** → Performed offline password cracking against the captured Kerberos service tickets.
+6. **VirtualBox** → Hosted the isolated lab network, ensuring safe and controlled testing.
+
+### Steps
+
+<img src="11_Screenshots/Kerberoastable_Ser_Acct_SPN_Verification.png">
+
+Configured the automated AD provisioning workflow to create the dedicated `HTTP_service` account and register its `HTTP/HTTP_service.De leDFIR.local` SPN, enabling controlled Kerberoasting validation.
+
+<img src="11_Screenshots/Kerberoasting_TGS_REP_Capture.png">
+
+Used a low-privileged domain account with Impacket `GetUserSPNs` to enumerate the exposed SPN and request a Kerberos TGS-REP hash for offline analysis.
+
+<img src="11_Screenshots/Kerberoasting_Hashcat_Crack_Success.png">
+
+Used Hashcat with the Kerberos TGS-REP format to successfully recover the deliberately weak `HTTP_service` password, validating the credential-exposure risk.
+
+### Summary
+
+**Investigation Findings:** Evidence from Active Directory, Impacket, and Hashcat confirmed that the low-privileged `john.smith` account could request a TGS-REP for `HTTP_service`, whose weak password was subsequently recovered offline.
+
+**Security Decision:** The service account was assessed against least-privilege principles and found to be limited to `Domain Users`, so remediation focused on eliminating weak service-account credentials and unnecessary SPNs rather than treating the account as privileged.
+
+**Validation:** The workflow was validated end-to-end by confirming the SPN, capturing a `$krb5tgs$23$` hash, successfully cracking it, and verifying that `HTTP_service` had no privileged group membership, no `AdminCount`, and no unconstrained delegation.
+
+### Operational Impact
+The implementation demonstrates a full identity‑attack path that defenders can detect and mitigate by enforcing strong, unique service‑account credentials, applying least‑privilege, and removing unnecessary SPNs — directly reducing the risk of credential compromise and unauthorized resource access.
