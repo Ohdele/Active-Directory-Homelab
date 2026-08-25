@@ -627,6 +627,9 @@ Demonstrated within a simulated AD lab environment (DeleDFIR.local) to validate 
 
 ## Steps
 
+[View PowerShell AD Automation – Part 11](./PowerShell-AD-Auto-10-11/)
+
+
 <img src="10_Screenshots/BloodHound_Michael_Obj.png">
 
 BloodHound inspection — Collected AD user object data and identified properties/relationships relevant to credential exposure.
@@ -679,6 +682,9 @@ Active Directory Security | Identity & Access Management | Kerberos Authenticati
 6. **VirtualBox** → Hosted the isolated lab network, ensuring safe and controlled testing.
 
 ### Steps
+
+[View PowerShell AD Automation – Part 11](./PowerShell-AD-Auto-10-11/)
+
 
 <img src="11_Screenshots/Kerberoastable_Ser_Acct_SPN_Verification.png">
 
