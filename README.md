@@ -1,8 +1,7 @@
-# ACTIVE DIRECTORY
+# ACTIVE DIRECTORY SECURITY & IDENTITY & ACCESS MANAGEMENT (IAM)
 
 ## Overview
-
-Built a Windows Active Directory homelab to simulate realistic security operations, including identity and access management (IAM), Joiner‑Mover‑Leaver (JML) lifecycle automation, access reviews, red‑team attack scenarios, and blue‑team defensive investigations. The environment provides a repeatable framework for testing, validating, and demonstrating SOC‑level identity and access controls.
+Built a Windows Active Directory homelab to simulate realistic security operations, including identity and access management `(IAM)`, Joiner‑Mover‑Leaver `(JML)` lifecycle automation, access reviews, red‑team attack scenarios, and blue‑team defensive investigations. The environment provides a repeatable framework for testing, validating, and demonstrating SOC‑level identity and access controls.
 
 ---
 
@@ -10,60 +9,48 @@ Built a Windows Active Directory homelab to simulate realistic security operatio
 # PART 00 — Active Directory Homelab Architecture & JML/IAM Workflow
 
 ## Objective
-
-Provide a clear architectural view of the Active Directory homelab and its IAM/JML automation to demonstrate how identity, access, security testing, and validation components work together.
+Provide a clear architectural view of the Active Directory homelab and its `IAM/JML` automation to demonstrate how identity, access, security testing, and validation components work together.
 
 ## Scope & Assumptions
-
-This diagram represents the simulated DeleDFIR.local Active Directory environment built in VirtualBox, including the management host, DC1, WS01, Kali Linux, and the JML/IAM workflow.
+Diagram represents the simulated *DeleDFIR.local* Active Directory environment built in VirtualBox, including the management host, DC1, WS01, Kali Linux, and the JML/IAM workflow.
 
 ## Skills
-
-- Active Directory Architecture
+- Active Directory, Network & Systems Architecture & Documentation
 - Identity & Access Management (IAM)
 - Joiner-Mover-Leaver (JML) Lifecycle Management
 - Access Review & Validation
-- Network & Systems Architecture
-- Security Architecture & Documentation
 
 ## Tools
-
 - **draw.io** — Used to design the architecture diagram and visually map the Active Directory infrastructure, management/automation layer, security-testing environment, and JML/IAM workflow.
 
 ## Steps
 
 <img src="00_Screenshots/AD%20-JML-IAM-Workflow.png">
 
-Created an architecture diagram showing the management, Active Directory infrastructure, and security-testing zones while highlighting the Part 8 flow from simulated HR data through JML/IAM automation to Active Directory access and audit evidence.
+Created an architecture diagram showing the management, Active Directory infrastructure, and security-testing zones while highlighting the Part 8 flow from simulated `HR data` through `JML/IAM` automation to Active Directory access and audit evidence.
 
 ## Summary
-
 **Security Decision:** A three-zone architecture was selected to clearly separate management and automation, identity infrastructure, and security testing while keeping the JML/IAM workflow visually prominent.
 
 
 ## Operational Impact
-
-A clear architecture gives SOC and security teams a single visual reference for understanding identity flows, access changes, investigation points, and security-testing paths across the lab.
+A clear architecture gives security teams a single visual reference for understanding identity flows, access changes, investigation points, and security-testing paths across the lab.
 
 ---
 
 
-# PART 1 — Creating Server + Workstation Virtual Environment + Active Directory Join
+# PART 01 — Creating Server + Workstation Virtual Environment + Active Directory Join
 
 ## Objective
-
-Create and configure a Windows Server 2022 and Windows 10 workstation environment, deploy the Active Directory domain, and successfully join the workstation to the domain as the foundation for subsequent SOC security operations.
+Create and configure a Windows Server 2022 and Windows 10 workstation environment, deploy the Active Directory domain, and successfully `join` the `workstation` to the `domain` as the foundation for subsequent security operations.
 
 ## Scope & Assumptions
-
-This is Part 1 of a local VirtualBox lab containing a Windows Server 2022 Domain Controller (`DC1`), Windows 10 workstation (`WS01`), Host-Only networking, and the `DeleDFIR.local` Active Directory domain.
+Local VirtualBox lab containing a Windows Server 2022 Domain Controller (`DC1`), Windows 10 workstation (`WS01`), Host-Only networking, and the `DeleDFIR.local` Active Directory domain.
 
 ## Skills
-
-Active Directory Administration | Windows Server Administration | DNS Configuration | Network Configuration | PowerShell | WinRM | Domain Management | Virtual Machine Administration | Troubleshooting
+Active Directory & Windows Server Administration | DNS Configuration | Network Configuration | PowerShell | WinRM | Domain Management | Virtual Machine Administration | Troubleshooting
 
 ## Tools
-
 VirtualBox provided the isolated lab infrastructure | Windows Server 2022 hosted Active Directory Domain Services and DNS | Windows 10 served as the domain workstation | PowerShell and WinRM supported remote administration and configuration
 
 ## Steps
@@ -93,34 +80,32 @@ VirtualBox provided the isolated lab infrastructure | Windows Server 2022 hosted
 ## F. Configured `WS01` to use the Domain Controller for DNS and successfully joined it to the `DeleDFIR.local` domain.
 
 ## Challenges & Troubleshooting
-
-WS01 initially could not discover the domain because its DNS configuration was incorrect and the cloned workstation remained associated with the unavailable `DFIR.local` domain. The issue was identified through network and domain configuration checks, after which WS01 was moved to `WORKGROUP`, configured to use `192.168.56.110` for DNS, and successfully joined to `DeleDFIR.local`.
+`WS01` initially could not discover the `domain` because its `DNS` configuration was incorrect and the cloned workstation remained associated with the unavailable *DFIR.local* domain. The issue was identified through *network and domain* configuration checks, after which `WS01` was moved to `WORKGROUP`, configured to use `192.168.56.110` for `DNS`, and successfully `joined` to *DeleDFIR.local*.
 
 ## Summary
 
-**Investigation Findings:** Configuration evidence confirmed successful `DC1` promotion, DNS configuration, network connectivity, and `WS01` reporting `PartOfDomain: True` for `DeleDFIR.local`.
+**Investigation Findings:** Configuration evidence confirmed successful `DC1` promotion, `DNS` configuration, network connectivity and `WS01` reporting *PartOfDomain: True* for *DeleDFIR.local*.
 
-**Security Decision:** A dedicated Host-Only network and static Domain Controller IP were used to provide predictable and controlled communication between the Active Directory systems.
+**Security Decision:** A dedicated *Host-Only network and static Domain Controller IP* were used to provide predictable and controlled communication between the Active Directory systems.
 
-**Validation:** WinRM connectivity, hostname configuration, static IP configuration, AD DS deployment, DNS configuration, and the final domain-join status were validated through PowerShell and Windows configuration evidence.
+**Validation:** `WinRM` connectivity, `hostname` configuration, static IP configuration, `AD DS` deployment, `DNS` configuration, and the final `domain-join` status were validated through `PowerShell` and Windows configuration evidence.
 
 ## SOC Impact
-
 This provides a realistic Windows identity environment where SOC teams can monitor and investigate authentication, account, endpoint, DNS, and Active Directory security events.
 
 ---
 
 
-# Part 2 — Automating Domain Users
+# Part 02 — Automating Domain Users
 
 ## Objective
-Automate Active Directory user and group provisioning to reduce manual account-creation errors and provide a repeatable, controlled method for building domain-user environments.
+Automate *Active Directory user and group* provisioning to reduce manual account-creation errors and provide a repeatable, controlled method for building `domain-user` environments.
 
 ## Scope & Assumptions
-This lab simulates a Windows domain environment using `DC1` as the Domain Controller and `WS01` as the Windows 10 workstation, with PowerShell and JSON used for repeatable account provisioning and authentication testing.
+This lab simulates a Windows domain environment using `DC1` as the Domain Controller and `WS01` as the Windows 10 workstation, with `PowerShell` and `JSON` used for repeatable account provisioning and authentication testing.
 
 ## Skills
-- Active Directory Administration | PowerShell Automation | Identity & Access Management | User and Group Provisioning | Domain Authentication | Troubleshooting & Incident Analysis | Security Validation | Windows Administration
+- Active Directory & Windows Administration | PowerShell Automation | Identity & Access Management | User and Group Provisioning | Domain Authentication | Troubleshooting & Incident Analysis | Security Validation.
 
 ## Tools
 - **Windows Server 2022 / Active Directory** — Domain Controller and identity management.
@@ -135,37 +120,36 @@ This lab simulates a Windows domain environment using `DC1` as the Domain Contro
 
 [View PowerShell AD Automation Files](./PowerShell-AD-Automation/)
 
-### 01. JSON-Based AD Configuration
+### JSON-Based AD Configuration
 <img src="02_Screenshots/ad-users-grps-auto.png">
 
 Defined users, groups, and memberships in a JSON schema and used PowerShell automation to provision the configured Active Directory environment consistently.
 
-### 02. Automated User & Group Creation
+### Automated User & Group Creation
 <img src="02_Screenshots/ad-user-creation-auto.png">
 
 Implemented `gen-ad.ps1` to create enabled domain users, generate secure random passwords, create groups, validate group existence, and assign users to their configured groups.
 
-### 03. Domain Authentication & Validation
+### Domain Authentication & Validation
 <img src="02_Screenshots/domain-user-auth-validation.png">
 
 Rejoined `WS01` to `DeleDFIR.local` and validated successful domain authentication and `Employees` group membership using `whoami` and `whoami /groups`.
 
 ## Summary
 
-**Investigation Findings:** Evidence from PowerShell execution, Active Directory Users and Computers, and workstation authentication confirmed that the JSON-driven automation successfully created enabled domain users and assigned them to the `Employees` group.
+**Investigation Findings:** Evidence from PowerShell execution, *Active Directory Users and Computers* and workstation authentication confirmed that the JSON-driven automation successfully created enabled domain users and assigned them to the `Employees` group.
 
-**Security Decision:** PowerShell automation with structured JSON configuration and secure random password generation was selected to reduce manual provisioning errors and avoid the intentionally weak credentials used in the reference vulnerable workflow; a known password was temporarily set for John Smith solely to validate domain authentication.
+**Security Decision:** PowerShell automation with structured `JSON` configuration and secure random password generation was selected to reduce manual provisioning errors and avoid the intentionally weak credentials used in the reference vulnerable workflow; a known password was temporarily set for `John Smith` solely to validate domain authentication.
 
-**Validation:** The workflow was validated through successful JSON parsing and WinRM file transfer, creation of the `Employees` group and configured AD users, confirmation that Michael Adeyemi was enabled and assigned to `Employees`, and successful `john.smith` authentication on `WS01` verified with `whoami` and `whoami /groups`.
+**Validation:** The workflow was validated through successful `JSON` parsing and `WinRM` file transfer, creation of the `Employees` group and configured AD users, confirmation that `Michael Adeyemi` was enabled and assigned to `Employees` and successful `john.smith` authentication on `WS01` verified with *whoami and whoami /groups*.
 
 ## Impact
-
-Repeatable identity provisioning and validation reduces manual administrative effort, improves consistency, and gives SOC teams clearer evidence of domain-account configuration during investigations.
+Repeatable identity provisioning and validation reduces manual administrative effort, improves consistency and gives SOC teams clearer evidence of domain-account configuration during investigations.
 
 ---
 
 
-# PART 3 — PowerShell: Random Users & Weak Passwords
+# PART 03 — PowerShell: Random Users & Weak Passwords
 
 ## Objective
 Automate randomized Active Directory user and group provisioning to create a controlled security-testing environment for identifying authentication, password-policy, and account-management risks.
@@ -188,42 +172,42 @@ This project is a local VirtualBox Active Directory lab using Windows Server 202
 
 [View PowerShell AD Automation Files](./PowerShell-AD-Automation/)
 
-### 01 — Random Active Directory Environment Generation
+### Random Active Directory Environment Generation
 
 Created a PowerShell-based generator that produces randomized users, groups, names, and passwords, providing repeatable identity data for controlled security testing.
 
-### 02 — Random Data & Group Selection
+### Random Data & Group Selection
 
 Implemented randomized and unique group selection so generated users receive varied organizational memberships for realistic access-control testing.
 
-### 03 — Random User Generation & JSON Structure
+### Random User Generation & JSON Structure
 <img src="03_Screenshots/Random-User-JSON-Generation.png">
 
 Configured the generator to create 20 randomized users with unique names, passwords, and group assignments and serialize the environment into a reusable JSON structure.
 
-### 04 — Random Domain Deployment & Troubleshooting
+### Random Domain Deployment & Troubleshooting
 <img src="03_Screenshots/RandomDomainDeployment.png">
 
 Deployed the generated environment to `DC1`, resolved group-handling and PowerShell Remoting issues, and verified the generated groups, users, and memberships in Active Directory.
 
-### 05 — Password Policy & Authentication Testing
+### Password Policy & Authentication Testing
 <img src="03_Screenshots/Password-Policy-Auth.png">
 
 Adjusted the domain password-policy testing workflow, validated authentication from `WS01`, and confirmed that the Default Domain Policy was being applied.
 
-### 06 — Random Domain Validation & Authentication
+### Random Domain Validation & Authentication
 <img src="03_Screenshots/Random-Domain-Validation-and-Auth.png">
 
 Validated the randomized domain environment across `DC1` and `WS01`, confirming domain membership, user authentication, account creation, and password-policy configuration.
 
 ## Challenges & Troubleshooting
-Initial JSON output contained metadata instead of strings; corrected data‑loading logic to ensure clean schema. Encountered WinRM/SMB transfer failures and group‑creation errors, resolved by adjusting remoting workflow and fixing group‑handling logic.
+Initial `JSON` output contained `metadata` instead of strings; corrected data‑loading logic to ensure clean schema. Encountered `WinRM/SMB` transfer failures and group‑creation errors, resolved by adjusting remoting workflow and fixing group‑handling logic.
 Password-policy authentication failed because generated passwords did not meet the domain requirements; I confirmed the account state with AD queries, then reset the test account to a compliant password and successfully authenticated from WS01.
 
 ## Summary
 
 ### Investigation Findings
-Evidence from Active Directory queries, `whoami`, `gpresult`, and `secpol.cfg` confirmed 20 generated users, successful domain authentication, application of the Default Domain Policy, and a configured minimum password length of 1 character.
+Evidence from Active Directory queries, `whoami`, `gpresult` and `secpol.cfg` confirmed `20` generated users, successful domain authentication, application of the Default Domain Policy and a configured minimum password length of `1` character.
 
 ### Security Decision
 The environment used controlled weak-password testing and randomized identities to expose authentication and account-provisioning weaknesses without affecting a production environment.
@@ -237,22 +221,18 @@ The project provides a repeatable identity-testing environment that helps SOC te
 ---
 
 
-# Part 4 — Building a Reversible Active Directory Lab
+# Part 04 — Building a Reversible Active Directory Lab
 
 ## Objective
-
 Build a deliberately vulnerable and repeatable Active Directory lab to support controlled security testing while demonstrating the ability to create, validate, revert, and rebuild domain security configurations.
 
 ## Scope & Assumptions
-
-A simulated `DeleDFIR.local` Active Directory environment consisting of Windows Server 2022 DC1, Windows 10 WS01, and a management workstation, with intentionally weak security settings used only for controlled lab exercises.
+A simulated *DeleDFIR.local* Active Directory environment consisting of Windows Server 2022 DC1, Windows 10 WS01 and a management workstation, with intentionally weak security settings used only for controlled lab exercises.
 
 ## Skills
-
-- Active Directory administration and user/group management | Windows Server and workstation administration | PowerShell automation | Security policy configuration and validation | Domain join and remote administration | Authentication and domain-trust validation - Troubleshooting and evidence-based investigation - Reversible configuration and clean-slate environment management
+- Active Directory & Windows Administration | PowerShell Automation | Security Policy & Authentication | Domain/Remote Administration | Troubleshooting & Evidence-Based Investigation | Environment Management.
 
 ## Tools
-
 - **Visual Studio Code** — Edited and maintained the PowerShell automation scripts and JSON configuration files.
 - **Windows Server 2022** — Domain Controller and Active Directory/DNS services
 - **Windows 10 Pro** — Domain workstation and authentication testing
@@ -264,13 +244,13 @@ A simulated `DeleDFIR.local` Active Directory environment consisting of Windows 
 
 ## Steps
 
-### 01 — Domain Controller Preparation
+### Domain Controller Preparation
 
 <img src="04_screenshots/AD_Domain_and_WeakPassword_Policy.png">
 
 Configured and validated the `DeleDFIR.local` Domain Controller and intentionally weak password policy to establish the controlled environment required for subsequent Active Directory security testing.
 
-### 02 — Password Policy & AD Automation
+### Password Policy & AD Automation
 
 [View PowerShell AD Automation Files](./PowerShell-AD-Automation/)
 
@@ -282,26 +262,25 @@ Executed the AD automation `-Undo` workflow to remove generated Active Directory
 
 Verified that the undo workflow restored the domain password policy to the stronger baseline of a 7-character minimum with password complexity enabled.
 
-### 03 — Workstation Domain Join & Remote Administration
+### Workstation Domain Join & Remote Administration
 
 <img src="04_screenshots/WS01-DC1-Remote-Admin-File-Transfer.png">
 
 Removed and rejoined WS01 to `DeleDFIR.local`, established PowerShell Remoting to DC1, and transferred the automation files for centralized Active Directory management.
 
-### 04 — Active Directory User Validation
+### Active Directory User Validation
 
 <img src="04_screenshots/Weak-Pass-Policy-Domain-User-Validation.png">
 
 Generated domain users with intentionally weak credentials and validated successful domain authentication, secure-channel health, and Domain Controller discovery from WS01.
 
-### 05 — Reversible Environment Management
+### Reversible Environment Management
 
 Validated the automation lifecycle by removing generated users and groups, restoring the stronger password policy, and confirming the environment could be recreated for repeatable security testing.
 
 ## Challenges & Troubleshooting
-
-After the AD automation `-Undo` workflow removed generated accounts, WS01 remained domain-joined and the previously used domain account was unavailable, so access was recovered through the existing local Administrator account without rebuilding the workstation.  
-Host-to-WS01 SMB transfer also failed after the domain rejoin, so VirtualBox Shared Folders were used to transfer the automation data before PowerShell Remoting was used to copy it to DC1.
+After the AD automation `-Undo` workflow removed generated accounts, `WS01` remained domain-joined and the previously used domain account was unavailable, so access was recovered through the existing local Administrator account without rebuilding the workstation.  
+*Host-to-WS01 SMB transfer* also failed after the domain rejoin, so VirtualBox *Shared Folders* were used to transfer the automation data before PowerShell Remoting was used to copy it to `DC1`.
 
 ## Summary
 
@@ -312,13 +291,12 @@ Host-to-WS01 SMB transfer also failed after the domain rejoin, so VirtualBox Sha
 **Validation:** The environment successfully created three configured domain users, assigned them to the `Employees` security group, authenticated a generated user from WS01, validated the domain connection, and restored the baseline password policy through the automation workflow.
 
 ## SOC Impact
-
 A repeatable vulnerable AD environment allows SOC teams to safely reproduce authentication and identity-related attack conditions, validate detection and response workflows, and reset the environment quickly for repeated investigations.
 
 ---
 
 
-# Part 5 — Brute-Forcing Domain Passwords
+# Part 05 — Brute-Forcing Domain Passwords
 
 ### Objective
 Assess the resilience of a controlled Active Directory environment against credential attacks and identify password-policy weaknesses that could increase account-compromise risk.
@@ -341,27 +319,27 @@ Testing was performed in the isolated `DeleDFIR.local` VirtualBox lab using Kali
 
 <img src="05_Screenshots/PasswordWordlistPrepared.png">
 
-Prepared domain usernames and a password wordlist in Kali for controlled credential testing against the Active Directory environment.
+# Prepared domain usernames and a password wordlist in Kali for controlled credential testing against the Active Directory environment.
 
 <img src="05_Screenshots/KalitoDC1NetworkValidation.png">
 
-Validated Host-Only connectivity between Kali and DC1 before conducting credential-testing activities.
+# Validated Host-Only connectivity between Kali and DC1 before conducting credential-testing activities.
 
 <img src="05_Screenshots/DC1-AD-SerEnum.png">
 
-Enumerated DC1 services with Nmap to identify exposed Active Directory services relevant to the security assessment.
+# Enumerated DC1 services with Nmap to identify exposed Active Directory services relevant to the security assessment.
 
 <img src="05_Screenshots/DC1SMBAuthValidation.png">
 
-Validated SMB connectivity and authenticated to DC1 with a domain account, confirming the credential-testing workflow was functioning.
+# Validated SMB connectivity and authenticated to DC1 with a domain account, confirming the credential-testing workflow was functioning.
 
 <img src="05_Screenshots/SMB_Cred_Validation_and_Password_Policy.png">
 
-Used the recovered low-privileged credential to validate SMB access and confirm the intentionally weak domain password policy.
+# Used the recovered low-privileged credential to validate SMB access and confirm the intentionally weak domain password policy.
 
 <img src="05_Screenshots/CredDomainUserEnum.png">
 
-Used the valid low-privileged credential to enumerate 28 domain user accounts through SMB.
+# Used the valid low-privileged credential to enumerate 28 domain user accounts through SMB.
 
 <img src="05_Screenshots/Credentialed-Group&Computer-Enum.png">
 
@@ -385,42 +363,53 @@ The exercise demonstrates how defenders can validate credential exposure and wea
 ---
 
 
-## Part 6 — BloodHound Domain Enumeration
+## Part 06 — BloodHound Domain Enumeration
 
-- **Objective:** Map Active Directory identities, privileges, and relationships to identify potential privilege paths and improve understanding of domain security risks.
+### Objective
+Map Active Directory identities, privileges, and relationships to identify potential privilege paths and improve understanding of domain security risks.
 
-- **Scope & Assumptions:** A controlled `DeleDFIR.local` Active Directory lab was enumerated remotely from a Kali Linux attacker workstation using a verified low-privileged domain account.
+### Scope & Assumptions
+A controlled `DeleDFIR.local` Active Directory lab was enumerated remotely from a `Kali Linux` attacker workstation using a verified low-privileged domain account.
 
-- **Skills:** Active Directory enumeration | identity and privilege analysis | attack-path analysis | security reconnaissance | troubleshooting | evidence-based investigation
+### Skills
+Active Directory enumeration | identity and privilege analysis | attack-path analysis | security reconnaissance | troubleshooting | evidence-based investigation
 
-- **Tools:** Kali Linux | BloodHound Community Edition (CE) | `bloodhound-python` | Neo4j | PostgreSQL | Active Directory | PowerShell | Cypher queries
+### Tools
+Kali Linux | BloodHound Community Edition (CE) | `bloodhound-python` | Neo4j | PostgreSQL | Active Directory | PowerShell | Cypher queries
 
-- **Steps:**
+### Steps
+
 <img src="06_Screenshots/BloodHound_Neo4j_Server_Started.png">
-  Configured the BloodHound environment and Neo4j backend, then used `bloodhound-python` with the verified domain credential to remotely collect Active Directory users, groups, computers, domains, GPOs, OUs, and containers for relationship analysis.
+
+Configured the BloodHound environment and Neo4j backend, then used `bloodhound-python` with the verified domain credential to remotely collect Active Directory users, groups, computers, domains, GPOs, OUs, and containers for relationship analysis.
 
 <img src="06_Screenshots/bloodhound-ad-relationship-graph.png">
-  Imported the collected data into BloodHound CE and analyzed domain relationships, group memberships, privileged accounts, and potential attack paths within the lab environment.
 
-- **Challenges & Troubleshooting:** 
-BloodHound initially encountered Kerberos, DNS, and Global Catalog resolution issues when attempting to reach `DC1`, evidenced by collector connection errors and hostname-resolution failures. Configured Kali to resolve the domain through the Domain Controller and validated hostname resolution, after which BloodHound successfully collected and exported the Active Directory data.
+Imported the collected data into BloodHound CE and analyzed domain relationships, group memberships, privileged accounts, and potential attack paths within the lab environment.
 
-- **Summary:**
-  - **Investigation Findings:** BloodHound successfully collected evidence covering 2 computers, 29 users, 62 groups, 2 GPOs, 1 OU, and 19 containers, enabling analysis of Active Directory relationships and privilege paths.
+### Challenges & Troubleshooting
+BloodHound initially encountered *Kerberos, DNS, and Global Catalog resolution issues* when attempting to reach `DC1`, evidenced by collector connection errors and hostname-resolution failures. Configured `Kali` to resolve the domain through the Domain Controller and validated hostname resolution, after which `BloodHound` successfully collected and exported the Active Directory data.
+
+### Summary
+
+**Investigation Findings:** 
+BloodHound successfully collected evidence covering 2 computers, 29 users, 62 groups, 2 GPOs, 1 OU, and 19 containers, enabling analysis of Active Directory relationships and privilege paths.
 
 <img src="06_Screenshots/BloodHound_AD_Collection_Success.png">
 
-  - **Security Decision:** BloodHound was selected because relationship-based AD analysis provides visibility into how low-privileged accounts, groups, computers, and privileged resources are connected.
+**Security Decision:** 
+BloodHound was selected because relationship-based AD analysis provides visibility into how low-privileged accounts, groups, computers, and privileged resources are connected.
 
-  - **Validation:** Successful JSON collection, import into BloodHound CE, and visualization of `DeleDFIR.local` relationships confirmed that the enumeration workflow was functioning correctly.
+**Validation:** 
+Successful JSON collection, import into BloodHound CE, and visualization of `DeleDFIR.local` relationships confirmed that the enumeration workflow was functioning correctly.
 
-- **SOC Impact**
- BloodHound gives SOC and security teams a relationship-based view of Active Directory that can accelerate investigation of privilege exposure, account relationships, and potential attack paths.
+### Operational Impact
+BloodHound gives SOC and security teams a relationship-based view of Active Directory that can accelerate investigation of privilege exposure, account relationships, and potential attack paths.
 
- ---
+---
 
 
- # PART 7 — PowerShell: Automating Random Local Administrators
+# PART 07 — PowerShell: Automating Random Local Administrators
 
 ## Objective
 Automate the generation and assignment of controlled local administrator accounts in an Active Directory environment to support repeatable privilege-management and security testing.
@@ -467,37 +456,24 @@ The updated 2,123-byte script was copied through the VirtualBox shared-folder wo
 
 **Validation:** The control was validated by confirming three `LocalAdmin: true` entries in the JSON and three corresponding generated users in DC1's local `Administrators` group, with continued monitoring recommended through Windows security-event and privileged-account activity.
 
-## SOC Impact
-
+## Operational Impact
 Automating repeatable privileged-account scenarios gives SOC teams a consistent way to generate, test, and validate identity-based detections while reducing manual configuration effort.
 
 ---
 
 
-# PART 8 — Joiner, Mover, Leaver (JML) & Simulated Access Review
+# PART 08 — Joiner, Mover, Leaver (JML) & Simulated Access Review
 
 ## Objective
-
 Automate employee lifecycle access management to reduce the risk of inappropriate, excessive, or retained Active Directory access when employees join, change roles, or leave.
 
 ## Scope & Assumptions
-
 This project is a simulated IAM workflow built on the DeleDFIR.local Active Directory homelab, using HR-style JSON records as the source of truth for Joiner, Mover, and Leaver events.
 
 ## Skills
-
-- **Identity & Access Management (IAM)**
-- **Joiner-Mover-Leaver (JML)** lifecycle management
-- **Active Directory** administration
-- **Access provisioning** and deprovisioning
-- **Access review** and validation
-- **PowerShell automation**
-- **JSON identity data** handling
-- **Audit logging** and evidence collection
-- **Security operations** and access-control analysis
+IAM & JML Lifecycle Management | Active Directory & Access Administration | Access Reviews & Validation | PowerShell & JSON Automation | Audit Logging & Evidence Collection | Security Operations & Access-Control Analysis.
 
 ## Tools
-
 - **Active Directory** — Provisioned, modified, disabled, and validated user identities and group-based access.
 - **PowerShell** — Automated JML provisioning, access revocation, validation, and audit logging.
 - **JSON** — Used as the simulated HR/source identity record.
@@ -509,45 +485,43 @@ This project is a simulated IAM workflow built on the DeleDFIR.local Active Dire
 [View PowerShell JML/IAM Automation – Part 8](./PowerShell-JML-IAM-Automation/)
 
 
-### A. Joiner — HR Record to AD Access
+### Joiner — HR Record to AD Access
 
 <img src="08_Screenshots/Joiner_HR_to_AD_Access_Validation.png">
 
 Created a simulated HR employee record for Sarah Johnson, provisioned the corresponding AD account with employee attributes, and validated baseline `Employees` group access.
 
-### B. Leaver — Automated Access Revocation
+### Leaver — Automated Access Revocation
 
 <img src="08_Screenshots/Leaver_AD_Access_Revocation_Audit.png">
 
 Changed Sarah Johnson’s HR status to `Terminated`, detected the termination during synchronization, disabled her AD account, removed `Employees` access, and recorded the remediation in an audit log.
 
-### C. Mover — Role Change & Access Review
+### Mover — Role Change & Access Review
 
 <img src="08_Screenshots/Mover_Access_Review_Final_State.png">
 
 Changed David Okafor’s department and role, exported his existing access for review, documented the retention decision, and validated his final AD memberships.
 
 ## Challenges & Troubleshooting
-
-The existing AD automation did not initially support HR lifecycle attributes, termination handling, or access-review decisions, so the PowerShell workflow was extended without removing the existing provisioning capability.  
-The workflow was validated against the HR JSON source and Active Directory outputs, confirming that the Leaver path disabled the terminated account and removed `Employees` access while the Mover review preserved approved baseline access.
+The existing AD automation did not initially support *HR lifecycle attributes*, termination handling, or access-review decisions, so the PowerShell workflow was extended without removing the existing provisioning capability.  
+The workflow was validated against the `HR JSON` source and Active Directory outputs, confirming that the `Leaver` path disabled the terminated account and removed `Employees` access while the `Mover` review preserved approved baseline access.
 
 ## Summary
 
-**Investigation Findings:** Evidence from the HR source records, Active Directory membership checks, and JML audit log confirmed that lifecycle changes could be mapped to specific identity provisioning, deprovisioning, and access-review outcomes.
+**Investigation Findings:** Evidence from the *HR source records, Active Directory membership checks, and JML audit log* confirmed that lifecycle changes could be mapped to specific identity provisioning, deprovisioning, and access-review outcomes.
 
 **Security Decision:** A JSON-driven PowerShell workflow was selected to provide repeatable lifecycle enforcement while keeping identity changes, access decisions, and remediation actions auditable.
 
 **Validation:** Three lifecycle scenarios were validated—one Joiner provisioned with baseline access, one Leaver disabled with access revoked and audited, and one Mover reviewed with approved access retained.
 
 ## Operational Impact
-
 Automating JML and access-review actions reduces manual identity-management effort, improves consistency of access decisions, and gives SOC/IAM teams auditable evidence for investigating inappropriate or outdated access.
 
 ---
 
 
-# PART 9 — Compromising Windows Hosts w/ Impacket
+# PART 09 — Compromising Windows Hosts w/ Impacket
 
 ## Objective
 Demonstrate how compromised administrative credentials could be used to remotely execute commands on Windows hosts and assess the resulting security exposure.
@@ -567,29 +541,28 @@ This lab simulation used Kali Linux against the `DeleDFIR.local` Active Director
 
 ## Steps
 
-### 1. Windows Host & SMB Enumeration
-
+### Windows Host & SMB Enumeration
 NetExec and Nmap identified WS01 (`192.168.56.102`) and confirmed SMB/445 exposure, while authenticated enumeration verified administrative access and writable `ADMIN$` and `C$` shares.
 
-### 2. PSExec Remote Execution
+### PSExec Remote Execution
 <img src="09_Screenshots/PSExec_WS01_SYS_Remote_Exec.png">
 
 Impacket PSExec used the confirmed administrative credentials to access WS01 through `ADMIN$`, create a temporary service, and obtain an `NT AUTHORITY\SYSTEM` shell.
 
-### 3. SMBExec Remote Execution
+### SMBExec Remote Execution
 SMBExec successfully established a semi-interactive shell on WS01 and confirmed execution as `NT AUTHORITY\SYSTEM`, demonstrating a second viable SMB-based execution path.
 
-### 4. WMIExec & Endpoint Detection
+### WMIExec & Endpoint Detection
 WMIExec was tested against WS01 and DC1 but did not establish a shell, while Microsoft Defender detected the remote-execution payload, demonstrating endpoint protection against the attempted technique.
 
-### 5. Privilege & Attack-Path Validation
+### Privilege & Attack-Path Validation
 `whoami /priv` confirmed extensive SYSTEM privileges, while BloodHound marked the compromised Administrator account as Owned and showed zero outbound object-control relationships for WS01.
 
 <img src="09_Screenshots/BloodHound_WS01_Outbound_Obj_Ctrl.png">
 
 ## Challenges & Troubleshooting
-WS01 initially returned `STATUS_NO_LOGON_SERVERS` because its DNS configuration used public DNS instead of the domain controller, which was identified through `ipconfig /all` and `nslookup` and resolved by configuring DNS to DC1 (`192.168.56.110`).  
-WMIExec authenticated but failed to establish a shell and triggered Microsoft Defender, so the failure and detection were documented rather than disabling the security control.
+WS01 initially returned *STATUS_NO_LOGON_SERVERS* because its DNS configuration used public DNS instead of the domain controller, which was identified through *ipconfig /all and nslookup* and resolved by configuring DNS to DC1 `192.168.56.110`.  
+`WMIExec` authenticated but failed to establish a shell and triggered Microsoft Defender, so the failure and detection were documented rather than disabling the security control.
 
 ## Summary
 
@@ -600,7 +573,6 @@ WMIExec authenticated but failed to establish a shell and triggered Microsoft De
 **Validation:** PSExec and SMBExec both achieved `NT AUTHORITY\SYSTEM`, WMIExec failed and generated a Defender detection, and BloodHound reported zero outbound object-control relationships for WS01.
 
 ## Operational Impact
-
 Helps SOC analysts quickly identify and validate exploitable administrative access and lateral‑movement paths before attackers can abuse them, improving triage speed and reducing overall security risk.
 
 ---
@@ -615,7 +587,7 @@ Identify and remediate the risk of exposed passwords stored in readable Active D
 Demonstrated within a simulated AD lab environment (DeleDFIR.local) to validate credential exposure, investigation, and remediation workflows.
 
 ## Skills
-- Active Directory security and user management | Credential exposure analysis | Identity and access management | SOC investigation and evidence collection | BloodHound enumeration and relationship analysis | Windows PowerShell administration | SMB authentication validation | Security remediation and verification | Technical documentation
+- Active Directory Security & IAM | Credential Exposure & BloodHound Analysis | SOC Investigation & Evidence Collection | PowerShell & SMB Administration | Security Remediation & Verification | Technical Documentation.
 
 ## Tools
 - **Active Directory / Windows Server** — Configured vulnerable user attributes and applied remediation.
@@ -632,20 +604,20 @@ Demonstrated within a simulated AD lab environment (DeleDFIR.local) to validate 
 
 <img src="10_Screenshots/BloodHound_Michael_Obj.png">
 
-BloodHound inspection — Collected AD user object data and identified properties/relationships relevant to credential exposure.
+### BloodHound inspection — Collected AD user object data and identified properties/relationships relevant to credential exposure.
 
 <img src="10_Screenshots/Exposed_Credential_SMB_Validation.png">
 
-Searched users.json for exposed descriptions and confirmed the discovered credential via SMB authentication.
+### Searched users.json for exposed descriptions and confirmed the discovered credential via SMB authentication.
 
 <img src="10_Screenshots/Credential_Exposure_Remediated.png">
 
-Reset the compromised account password and cleared the exposed AD description to remove the credential.
+### Reset the compromised account password and cleared the exposed AD description to remove the credential.
 
 ## Challenges & Troubleshooting
 AD automation generated random passwords when accounts were recreated, invalidating known credentials; resolved by verifying account state and retrieving the current lab credential before rerunning BloodHound.
 
-BloodHound did not display the exposed description directly in the user panel, so users.json was searched to identify the exposed credential, which was then successfully validated through SMB authentication within the lab.
+`BloodHound` did not display the exposed description directly in the user panel, so users.json was searched to identify the exposed credential, which was then successfully validated through SMB authentication within the lab.
 
 ## Summary
 
@@ -656,7 +628,6 @@ BloodHound did not display the exposed description directly in the user panel, s
 **Validation:** Get-ADUser verified the description field was cleared after remediation.
 
 ## Operational Impact
-
 Reduces organizational breach risk by identifying and eliminating exposed Active Directory credentials before attackers can exploit them for unauthorized access, lateral movement, or data compromise.
 
 ---
